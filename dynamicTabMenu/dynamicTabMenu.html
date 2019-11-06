@@ -1,0 +1,143 @@
+﻿<!<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!--Meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.css" integrity="sha256-2RdmDD1veq0y68SwASxtC7hKE+IBoBLjNLzKS59Ghsk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js" integrity="sha256-4Cr335oZDYg4Di3OwgUOyqSTri0jUm2+7Gf2kH3zp1I=" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" type="text/css" href="./dynamicTabMenu.css">
+
+    <script>
+
+        
+
+        function getWidth(element){
+            var style = element.currentStyle || window.getComputedStyle(element),
+                width = element.offsetWidth, // or use style.width
+                margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight),
+                padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight),
+                border = parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+
+            return width + margin - padding + border;
+        }
+
+        function initializeSlick() {
+            var $slick = $('#tabs');
+            console.log("adsad", document)
+            var children = document.getElementById('tabs').children;
+
+            var totalWidth = 0;
+
+            for (var i = 0; i < children.length; i++) {
+                //make sure this maatches the font size set in css
+                children[i].style.fontSize = "18px";
+                //make sure this maatches the margin set in css
+                children[i].style.marginRight = "50px";
+                totalWidth += getWidth(children[i]);
+                children[i].style.fontSize = "";
+                children[i].style.marginRight = "";
+            }
+
+            totalWidth -= 50;
+
+            if (totalWidth > 760) {
+                totalWidth = 992;
+            }
+
+            const slickSettings = {
+                slidesToShow: (children.length > 1) ? children.length - 1 : 1,
+                centerMode: true,
+                infinite: true,
+                arrows: false,
+                variableWidth: true,
+                centerPadding: 0,
+                responsive: [
+                    {
+                        breakpoint: 99999,
+                        settings: "unslick"
+                    },
+                    {
+                        breakpoint: totalWidth,
+                        settings: {
+                            slidesToShow: (children.length > 1) ? children.length - 1 : 1
+                        }
+                    }
+                ]
+            }
+
+            $slick.slick(slickSettings);
+
+            $slick.on('click', '.slick-slide', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                var index = $(this).data("slick-index");
+                if ($('.slick-slider').slick('slickCurrentSlide') !== index) {
+                    $('.slick-slider').slick('slickGoTo', index);
+                }
+            });
+
+            $slick.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+                $('.nav-item').removeClass('slick-active').removeClass('active');
+            });
+
+            $slick.on('afterChange', function (event, slick, currentSlide, nextSlide) {
+                //this is where you run what you need to run on load
+            });
+
+            $(window).on('resize', function () {
+                if (!$slick.hasClass('slick-initialized')) {
+                    return $slick.slick(slickSettings);
+                }
+            });
+        }
+
+        window.onload = function () {
+            initializeSlick();
+        };
+        
+    </script>
+
+</head>
+    <body>
+        <ul id="tabs" class="nav nav-tabs desktop" role="tablist">
+            <li data-tab-id="0" class="nav-item item active">
+                <a id="tab-0" href="#News" class="nav-link" data-toggle="tab" role="tab" title="News">News</a>
+            </li>
+            <li data-tab-id="1" class="nav-item item">
+                <a id="tab-1" href="#Media" class="nav-link" data-toggle="tab" role="tab" title="Media">Media</a>
+            </li>
+            <li data-tab-id="2" class="nav-item item">
+                <a id="tab-2" href="#PrimarySources" class="nav-link" data-toggle="tab" role="tab" title="Primary Sources">Primary Sources</a>
+            </li>
+            <li data-tab-id="3" class="nav-item item">
+                <a id="tab-3" href="#Reference" class="nav-link" data-toggle="tab" role="tab" title="Reference">Reference</a>
+            </li>
+            <li data-tab-id="4" class="nav-item item">
+                <a id="tab-4" href="#Editorials" class="nav-link" data-toggle="tab" role="tab" title="Editorials">Editorials</a>
+            </li>
+        </ul>
+        <div id="content" class="tab-content">
+            <div id="News" class="card tab-pane active" role="tabpanel" aria-labelledby="News"></div>
+            <div id="Media" class="card tab-pane active" role="tabpanel" aria-labelledby="Media"></div>
+            <div id="PrimarySources" class="card tab-pane active" role="tabpanel" aria-labelledby="PrimarySources"></div>
+            <div id="Reference" class="card tab-pane active" role="tabpanel" aria-labelledby="Reference"></div>
+            <div id="Editorials" class="card tab-pane active" role="tabpanel" aria-labelledby="Editorials"></div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,169 @@
+﻿.nav-tabs {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    font-size: 18px;
+    margin-bottom: 20px;
+    flex-wrap: nowrap;
+    list-style: none;
+    padding-left: 0px;
+}
+
+.nav-tabs li {
+    white-space: nowrap;
+}
+
+
+.nav-tabs li.nav-item {
+    margin-right: 50px;
+}
+
+.nav-tabs li.nav-item:last-child {
+    margin-right: 0px;
+}
+
+.nav-tabs li.nav-item.active a {
+    font-weight: bold;
+    color: blue;
+    border: none;
+    border-bottom: solid 2px blue;
+}
+
+.nav-tabs li.nav-item:hover a {
+    color: blue;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+a {
+    color: black;
+    border: none;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-decoration: none;
+}
+
+a::after {
+    display: block;
+    content: attr(title);
+    font-weight: bold;
+    height: 1px;
+    color: transparent;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+a:hover {
+    background: none;
+}
+
+
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
+    .nav-tabs {
+        width: 100%;
+        overflow: hidden;
+        left: 0;
+        z-index: 5;
+    }
+
+    .nav-tabs.slick-slider::before {
+        content: " ";
+        left: -5px;
+        top: 0;
+        background: linear-gradient(to right, white, rgba(255, 255, 255, 0));
+        height: 24px;
+        width: 15%;
+        z-index: 10;
+        position: absolute;
+        height: 100%;
+    }
+
+    .nav-tabs.slick-slider::after {
+        content: " ";
+        right: -5px;
+        top: 0;
+        background: linear-gradient(to left, white, rgba(255, 255, 255, 0));
+        height: 24px;
+        width: 15%;
+        z-index: 10;
+        position: absolute;
+        height: 100%;
+    }
+
+    .nav-tabs .slick-list .slick-track {
+        /*height: 24px;*/
+    }
+
+    .nav-tabs .slick-list .slick-track .slick-slide.slick-current {
+        font-weight: bold !important;
+        color: blue !important;
+        border: none !important;
+        border-bottom: solid 1px blue !important;
+    }
+
+    .nav-tabs .slick-list .slick-track .slick-slide.slick-current a {
+        font-weight: bold !important;
+        color: blue !important;
+        border: none;
+    }
+
+    .nav-tabs .slick-list .slick-track .slick-slide .nav-item {
+        margin-right: 0px;
+    }
+
+    .nav-tabs .slick-list .slick-track .slick-slide .nav-item > a {
+        text-align: center;
+        font-size: 16px;
+        margin-left: 15px;
+        margin-right: 15px;
+        padding-left: 0px;
+        padding-right: 0px;
+        color: black;
+        cursor: default;
+        font-weight: normal;
+    }
+
+    .nav-tabs .slick-list .slick-track .slick-slide .nav-item > a:focus {
+        outline: none;
+    }
+
+
+    
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+    /*.nav-tabs {
+        max-width: 100%;
+    }
+
+    .nav-tabs li.nav-item {
+        margin-right: 2%;
+        font-size: 16px;
+    }*/
+    
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+    .nav-tabs {
+        position: absolute;
+    }
+
+    .nav-tabs .slick-list .slick-track {
+        
+    }
+
+    .nav-tabs .slick-list .slick-track .slick-slide .nav-item > a {
+        font-size: 14px;
+    }
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width : 320px) {
+}
