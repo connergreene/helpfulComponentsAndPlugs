@@ -39,7 +39,7 @@
 
         function initializeSlick() {
             var $slick = $('#tabs');
-            console.log("adsad", document)
+            
             var children = document.getElementById('tabs').children;
 
             var totalWidth = 0;
@@ -96,12 +96,41 @@
                 $('.nav-item').removeClass('slick-active').removeClass('active');
             });
 
+            //tracks if slide changed because of screen resize vs actual clicking
+            var screenSizeChange = false;
+
             $slick.on('afterChange', function (event, slick, currentSlide, nextSlide) {
-                //this is where you run what you need to run on load
+                
+                if (!screenSizeChange) {
+                    //this is where you run what you need to run on load
+                }
+                else {
+                    screenSizeChange = false;
+                }
+            });
+
+
+            $slick.on('init', function (event, slick) {
+                const currentSlide = slick.slickCurrentSlide();
+                //getting the id placed on the currently selected slide
+                const theTabId = parseInt($(slick.$slides[currentSlide]).find('.nav-item').attr('data-tab-id'));
+
+                //the element that was selected before it became a slider(this may not work since I am using React to track this in a different way)
+                const correctTabEle = document.querySelector("nav-item.active");
+
+                if (theTabId !== that.props.tabID) {
+                    const correctTabId = parseInt($(correctTabEle).parents(".slick-slide").attr('data-slick-index'));
+
+                    //console.log("asda", $(correctTabEle).parents(".slick-slide").attr('data-slick-index'));
+
+                    //$("ul").find("[data-slide='" + current + "']")
+                    screenSizeChange = true;
+                    slick.slickGoTo(correctTabId);
+                }
             });
 
             $(window).on('resize', function () {
-                if (!$slick.hasClass('slick-initialized')) {
+                if (!$slick.hasClass('slick-initialized') && window.innerWidth <= totalWidth ) {
                     return $slick.slick(slickSettings);
                 }
             });
