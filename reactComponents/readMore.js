@@ -1,5 +1,9 @@
 ﻿import React from 'react';
 
+//install 'resize-observer-polyfill'
+import ResizeObserver from 'resize-observer-polyfill';
+import './readMore.scss';
+
 export default class ReadMore extends React.Component {
 
     constructor(props) {
@@ -15,6 +19,7 @@ export default class ReadMore extends React.Component {
         var el = element;
         var cache = el.innerHTML;
         var text = el.innerHTML;
+        var hiddenText = "";
 
         el.innerHTML = 'a';
         var initial = el.offsetHeight * lines;
@@ -24,16 +29,15 @@ export default class ReadMore extends React.Component {
             if (el.offsetHeight == initial) {
                 var temp = el.innerHTML;
                 el.innerHTML = cache;
-
-                return temp;
+                return temp + "<span class='hiddenText' style='display: none;' aria-hidden='true'>" + this.trimCloseTags(hiddenText) + "</span>";
             }
             else if (el.offsetHeight < initial) {
-                return el.innerHTML;
+                return el.innerHTML + "<span class='hiddenText' style='display: none;' aria-hidden='true'>" + this.trimCloseTags(hiddenText) + "</span>";
             }
 
+            hiddenText = text.substring(text.lastIndexOf(" "), text.length) + hiddenText;
             text = text.substring(0, text.lastIndexOf(" "));
-
-            el.innerHTML = text + "<span id='readMoreCont'><span>... </span><a id='readMore' href=''><span>Read More</span>  <i class='fas fa-chevron-down'></i></a></span>";
+            el.innerHTML = text + "<span class='readAloudIgnore' id='readMoreCont'><span>... </span><a id='readMore' href=''><span>Read More</span>  <i class='fas fa-chevron-down'></i></a></span>";
         }
     }
 
@@ -59,21 +63,12 @@ export default class ReadMore extends React.Component {
         else {
             return htmlString.substring(0, htmlString.length);
         }
-
-        
-
-    } 
-
-    updateDimensions = () => {
-        if (this.state.contWidth !== this.readMoreRef.clientWidth) {
-            this.setState({ contWidth: this.readMoreRef.clientWidth})
-        }
     }
 
     componentDidUpdate(prevProps, prevState) {
+        let readMoreEl = $(this.readMoreRef);
 
         if (prevState.truncated !== this.state.truncated) {
-            let readMoreEl = $(this.readMoreRef);
 
             if (this.state.truncated) {
                 readMoreEl.html(this.getLines(this.readMoreRef, this.props.lines));
@@ -84,21 +79,18 @@ export default class ReadMore extends React.Component {
 
             }
             else {
-                
-                const text = this.trimCloseTags(this.props.content) + "<span id='showLessCont'> <a id='showLess' href=''><span>Show Less</span>  <i class='fas fa-chevron-up'></i></a></span>";
+                const text = this.trimCloseTags(this.props.content) + "<span class='readAloudIgnore' id='showLessCont'> <a id='showLess' href=''><span>Show Less</span>  <i class='fas fa-chevron-up'></i></a></span>";
                 readMoreEl.html(text);
 
                 if (document.getElementById("showLess")) {
                     document.getElementById("showLess").onclick = this.toggleLines;
                 }
-                
+
             }
-            
+
         }
 
-        if (prevState.contWidth !== this.state.contWidth) {
-            let readMoreEl = $(this.readMoreRef);
-
+        if (this.state.truncated && ((prevState.contWidth !== this.state.contWidth) || (prevState.contHeight !== this.state.contHeight))) {
             if (this.readMoreRef.innerHTML !== this.props.content) {
                 readMoreEl.html(this.props.content);
             }
@@ -109,25 +101,38 @@ export default class ReadMore extends React.Component {
             }
         }
 
-        
+
+    }
+
+    observeResize = () => {
+        if (this.readMoreRef.clientWidth !== this.state.contWidth) {
+            this.setState({ contWidth: this.readMoreRef.clientWidth });
+        }
+
+        if (this.readMoreRef.offsetHeight !== this.state.offsetHeight) {
+            this.setState({ contHeight: this.readMoreRef.offsetHeight });
+        }
     }
 
     componentDidMount() {
-        window.addEventListener("resize", this.updateDimensions);
-        this.setState({ contWidth: this.readMoreRef.clientWidth });
+        this.resizeObserver = new ResizeObserver(this.observeResize);
+        this.resizeObserver.observe(this.readMoreRef);
 
+        if (this.props.setToExpanded) {
+            this.setState({ truncated: false });
+        }
     }
 
 
     componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions);
+        this.resizeObserver.unobserve(this.readMoreRef);
     }
 
 
     render() {
         const { content } = this.props;
         return (
-            <div className={this.state.truncated ? "readMore truncated" : "readMore full"} ref={(node) => { this.readMoreRef = node; }} ></div>
+            <div className={this.state.truncated ? "readMore truncated" : "readMore full"} ref={(node) => { this.readMoreRef = node; }} dangerouslySetInnerHTML={{ __html: content }} ></div>
         );
     }
 }

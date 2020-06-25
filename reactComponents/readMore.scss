@@ -1,0 +1,14 @@
+﻿.readMore {
+
+    &.truncated {
+        p {
+            display: inline;
+        }
+    }
+
+    &.full {
+        /*> div {
+            display: inline;
+        }*/
+    }
+}
