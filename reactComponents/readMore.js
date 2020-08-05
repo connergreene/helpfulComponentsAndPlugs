@@ -29,15 +29,15 @@ export default class ReadMore extends React.Component {
             if (el.offsetHeight == initial) {
                 var temp = el.innerHTML;
                 el.innerHTML = cache;
-                return temp + "<span class='hiddenText' style='display: none;' aria-hidden='true'>" + this.trimCloseTags(hiddenText) + "</span>";
+                return temp + "<span className='hiddenText' style='display: none;' aria-hidden='true'>" + this.trimCloseTags(hiddenText) + "</span>";
             }
             else if (el.offsetHeight < initial) {
-                return el.innerHTML + "<span class='hiddenText' style='display: none;' aria-hidden='true'>" + this.trimCloseTags(hiddenText) + "</span>";
+                return el.innerHTML + "<span className='hiddenText' style='display: none;' aria-hidden='true'>" + this.trimCloseTags(hiddenText) + "</span>";
             }
 
             hiddenText = text.substring(text.lastIndexOf(" "), text.length) + hiddenText;
             text = text.substring(0, text.lastIndexOf(" "));
-            el.innerHTML = text + "<span class='readAloudIgnore' id='readMoreCont'><span>... </span><a id='readMore' href=''><span>Read More</span>  <i class='fas fa-chevron-down'></i></a></span>";
+            el.innerHTML = text + "<span className='readAloudIgnore' id='readMoreCont'><span>... </span><a id='readMore' href=''><span>Read More</span>  <i className='fas fa-chevron-down'></i></a></span>";
         }
     }
 
@@ -79,7 +79,7 @@ export default class ReadMore extends React.Component {
 
             }
             else {
-                const text = this.trimCloseTags(this.props.content) + "<span class='readAloudIgnore' id='showLessCont'> <a id='showLess' href=''><span>Show Less</span>  <i class='fas fa-chevron-up'></i></a></span>";
+                const text = this.trimCloseTags(this.props.content) + "<span className='readAloudIgnore' id='showLessCont'> <a id='showLess' href=''><span>Show Less</span>  <i className='fas fa-chevron-up'></i></a></span>";
                 readMoreEl.html(text);
 
                 if (document.getElementById("showLess")) {
